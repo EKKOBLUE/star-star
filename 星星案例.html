@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" onclick="star(event)">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>点击页面出现星星</title>
+    <script>
+        function star(e){
+            var obj=document.createElement("img");//创建一个星星
+            obj.src="img/star.png";                   //添加src属性
+            var w=Math.random()*(100-20)+20;      //创建让星星的大小在20到100之间随机的随机数
+            obj.width=w;                          //随机数赋值给星星width属性
+            var x=e.clientX;                      //获取触发点击事件时鼠标的坐标位置
+            var y=e.clientY;
+            obj.style.position="absolute";        //改变星星CSS定位为绝对定位
+            obj.style.left=x-(w*0.5)+"px";        //赋值鼠标坐标位置到CSS定位属性的值
+            obj.style.top=y-(w*0.5)+"px";         //-(w*0.5)是为了让星星和鼠标位置居中对齐
+            document.body.appendChild(obj);       //把星星的容器img标签作为子元素放到body
+        }
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
