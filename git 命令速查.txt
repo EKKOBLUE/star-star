@@ -1,0 +1,89 @@
+git常用命令速查表
+
+git add .					提交修改和添加到index区
+git add -u 					提交修改和删除到index区
+git add -A					提交所有变动到index区
+
+git status					查看暂存区和工作区状态
+
+git stash					把提交到暂存区的修改和工作区的修改（不包括新建和删除）储藏起来(使用-a或者--all命令可以stash当前目录下的所有修改。)
+git stash list  			查看储藏列表
+git stash pop 储藏序号		恢复指定储藏到工作区然后删除这个stash 默认使用最近的stash（即stash@{0}）
+git stash apply 储藏序号    恢复指定储藏到工作区 默认使用最近的stash（即stash@{0}）
+git stash branch 分支名		恢复储藏的工作同时新建一个分支然后在新的分支上继续当时的工作
+git stash drop stash@{0}	删除指定的stash
+git stash clear				删除所有缓存的stash
+git stash show 储藏序号		查看指定stash的diff
+
+git commit -m'注释'			把暂存区的所有修改提交到本地仓库
+git commit --amend			修改最后一次提交
+
+git log 					查看版本提交历史
+git reflog 					查看所有提交历史（包括被回退的）
+git log -p 文件名 			查看指定文件的提交历史
+
+git reset --hard 版本号		硬重置，把版本库，暂存区，工作区重置到指定版本  HEAD（当前版本）HEAD^^(前两个版本)HEAD~3(前三个版本)
+git reset --soft 版本号		软重置，把版本库				重置到指定版本
+git reset 版本号			默认重置把版本库，暂存区，		重置到指定版本
+
+git revert 版本号			做反向操作覆盖，撤销指定版本和其之后版本的修改
+
+git checkout 分支名			切换到指定分支
+git checkout -- 文件名		用版本库里的版本替换工作区的版本（相当于撤销工作区的修改），无论工作区是修改还是删除，都可以“一键还原”。
+							先用<git reset HEAD 文件名> 再用此条命令可以撤销已经提交到暂存区的修改
+git checkout 版本号 -- 文件名 可以把指定文件重置到指定版本然后commit可以形成合法的回退推到远程
+
+git branch 					显示所有本地分支
+git branch 分支名 		  	创建新分支
+git branch -d 分支名  		删除本地分支
+
+
+git merge 分支名			合并指定分支到当前分支
+
+
+<remote>主机名一般默认是origin;
+git remote add origin <url>     关联远程版本库
+git remote -v					查看远程版本库信息
+git remote show 主机名 			查看指定远程版本库信息
+
+git fetch origin  					从远程库获取代码
+git pull origin <branch>:<branch>	拉取远程库指定分支版本到指定分支
+git pull origin <branch>			拉取远程库指定分支版本到当前分支
+
+git push - u origin master 			将本地的master分支推送到origin主机，同时指定origin为默认主机，后面就可以不加任何参数使用git push
+git push origin                     将当前分支推送到origin主机的对应分支
+git push origin master				将当前本地分支推送到远程对应分支
+git push origin master:master		将本地指定分支推送到远程指定分支
+git push origin :分支名				删除指定远程分支
+
+git tag   							列出所有本地标签
+git tag 标签名						给最新commit打一个标签
+git tag 标签名 版本号				给指定commit打一个标签
+git tag show 标签名					查看标签信息
+git tag -d 标签名					删除指定标签
+git push origin 标签名				推送指定标签到远程库
+git push origin --tags				推送所有标签到远程库
+git tag -d 标签名   git push origin :refs/tags/标签名	删除本地标签然后删除远程标签
+
+git rebase			尚未理解
+
+
+正确的回退姿势
+
+只回退一些文件：git checkout 版本号 -- 文件1 文件2
+				然后commit这些改动，组成最新的版本
+				
+回退前一次或前几次修改：git revert 版本号或者HEAD^ 逆向回放，撤销C回到B
+
+回到指定版本：git reset --hard 指定版本号	 把版本库、暂存区、工作区强行重置到指定版本（HEAD指向这个版本）
+			  git reset --soft 当前最新版本		 把HEAD设置指向当前版本，相当于在当前版本的基础上做修改
+			  git commiit -m'回到xx版本'	 提交得到跟指定版本相同的最新版本，满足fast forward
+
+回到指定版本（新开分支法）：git checkout -b 分支名 指定版本号	新开一个分支同时重置到指定版本
+							git reset --soft 当前最新版本		指针移动到最新版本
+							git commit -m''						得到和指定版本相同的最新版本
+							把这个branch推到远程库的master
+							git push origin HEAD:master 或者
+							git push origin ttt:master 都行
+							完事之后删掉这个临时的branch即可
+
