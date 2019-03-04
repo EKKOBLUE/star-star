@@ -1,5 +1,11 @@
-git常用命令速查表
+起始配置
+git config --global user.name "Your Name"    设置名称
+git config --global user.email "email@example.com"		设置邮箱
+注意git config命令的--global参数，用了这个参数，表示你这台机器上所有的Git仓库都会使用这个配置，当然也可以对某个仓库指定不同的用户名和Email地址。
+ssh-keygen -t rsa -C "youremail@example.com"       创建SSH Key
 
+
+常用命令速查表
 git add .					提交修改和添加到index区
 git add -u 					提交修改和删除到index区
 git add -A					提交所有变动到index区
@@ -21,6 +27,7 @@ git commit --amend			修改最后一次提交
 git log 					查看版本提交历史
 git reflog 					查看所有提交历史（包括被回退的）
 git log -p 文件名 			查看指定文件的提交历史
+git log --graph --pretty=oneline --abbrev-commit  查看详细提交历史
 
 git reset --hard 版本号		硬重置，把版本库，暂存区，工作区重置到指定版本  HEAD（当前版本）HEAD^^(前两个版本)HEAD~3(前三个版本)
 git reset --soft 版本号		软重置，把版本库				重置到指定版本
@@ -63,7 +70,7 @@ git tag show 标签名					查看标签信息
 git tag -d 标签名					删除指定标签
 git push origin 标签名				推送指定标签到远程库
 git push origin --tags				推送所有标签到远程库
-git tag -d 标签名   git push origin :refs/tags/标签名	删除本地标签然后删除远程标签
+git tag -d 标签名  git push origin :refs/tags/标签名	删除本地标签然后删除远程标签
 
 git rebase			尚未理解
 
