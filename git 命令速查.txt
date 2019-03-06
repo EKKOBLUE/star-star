@@ -53,9 +53,12 @@ git remote add origin <url>     关联远程版本库
 git remote -v					查看远程版本库信息
 git remote show 主机名 			查看指定远程版本库信息
 
+git push --set-upstream origin branch_name  在远程创建一个与本地branch_name同名的分支并跟踪
+git checkout --track origin/branch_name	    在本地创建一个与branch_name同名分支跟踪远程分支
+
 git fetch origin  					从远程库获取代码
-git pull origin <branch>:<branch>	拉取远程库指定分支版本到指定分支
-git pull origin <branch>			拉取远程库指定分支版本到当前分支
+git pull origin 远程分支名:本地分支名	拉取远程库指定分支版本到指定分支	等于git fetch+git merge
+git pull origin 分支名				拉取远程库指定分支版本到当前分支
 
 git push - u origin master 			将本地的master分支推送到origin主机，同时指定origin为默认主机，后面就可以不加任何参数使用git push
 git push origin                     将当前分支推送到origin主机的对应分支
