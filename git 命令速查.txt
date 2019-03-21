@@ -2,13 +2,21 @@
 git config --global user.name "Your Name"    设置名称
 git config --global user.email "email@example.com"		设置邮箱
 注意git config命令的--global参数，用了这个参数，表示你这台机器上所有的Git仓库都会使用这个配置，当然也可以对某个仓库指定不同的用户名和Email地址。
+配置Git的时候，加上--global是针对当前用户起作用的，如果不加，那只针对当前的仓库起作用。
+配置文件放哪了？每个仓库的Git配置文件都放在.git/config文件中：
+
 ssh-keygen -t rsa -C "youremail@example.com"       创建SSH Key
 
 
 常用命令速查表
-git add .					提交修改和添加到index区
-git add -u 					提交修改和删除到index区
-git add -A					提交所有变动到index区
+git clone 链接				克隆一个远程仓库
+git init 					初始化一个本地仓库（在项目文件夹里新建一个空的版本库）
+git remote add origin <url> 关联一个远程版本库	
+git pull origin 远程分支名:本地分支名	拉取远程库指定分支版本到指定分支
+
+git add .					提交修改和添加到index暂存区
+git add -u 					提交修改和删除到index暂存区
+git add -A					提交所有变动到index暂存区
 
 git status					查看暂存区和工作区状态
 
@@ -27,18 +35,22 @@ git commit --amend			修改最后一次提交
 git log 					查看版本提交历史
 git reflog 					查看所有提交历史（包括被回退的）
 git log -p 文件名 			查看指定文件的提交历史
-git log --graph --pretty=oneline --abbrev-commit  查看详细提交历史
+git log --graph --pretty=oneline --abbrev-commit  查看分支提交历史
+git log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit 更一目了然的分支提交历史
+已配置了简写（git lg） 配置方法命令行：git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+
 
 git reset --hard 版本号		硬重置，把版本库，暂存区，工作区重置到指定版本  HEAD（当前版本）HEAD^^(前两个版本)HEAD~3(前三个版本)
 git reset --soft 版本号		软重置，把版本库				重置到指定版本
-git reset 版本号			默认重置把版本库，暂存区，		重置到指定版本
+git reset 版本号			默认重置把版本库，暂存区，		重置到指定版本 默认参数--mixed
 
 git revert 版本号			做反向操作覆盖，撤销指定版本和其之后版本的修改
 
 git checkout 分支名			切换到指定分支
-git checkout -- 文件名		用版本库里的版本替换工作区的版本（相当于撤销工作区的修改），无论工作区是修改还是删除，都可以“一键还原”。
+git checkout -- 文件名		用当前版本库（HEAD指针指向的版本）里的指定文件的版本替换工作区的版本（相当于撤销工作区的修改），无论工作区是修改还是删除，都可以“一键还原”。
 							先用<git reset HEAD 文件名> 再用此条命令可以撤销已经提交到暂存区的修改
 git checkout 版本号 -- 文件名 可以把指定文件重置到指定版本然后commit可以形成合法的回退推到远程
+git reset --hard HEAD	    用当前版本库（HEAD指针指向的版本）里的所有文件的版本替换工作区的版本
 
 git branch 					显示所有本地分支
 git branch 分支名 		  	创建新分支
@@ -75,8 +87,9 @@ git push origin 标签名				推送指定标签到远程库
 git push origin --tags				推送所有标签到远程库
 git tag -d 标签名  git push origin :refs/tags/标签名	删除本地标签然后删除远程标签
 
-git rebase			尚未理解
-
+git rebase 分支1						取出当前所在分支2与分支1共同祖先版本之后的commit历史，变基到分支1最新版本后面（依序重放一遍）；然后切换到分支1输入命令git merge分支2快进合并这些历史避免未变基直接git merge而导致提交历史有分叉
+git rebase 分支1 分支2					将分支2变基到分支1（可以不用切换到分支2进行变基）
+git rebase --onto 分支1 分支2 分支3		取出 分支3，找出处于 分支3 和 分支2 的共同祖先之后的修改，然后把它们在 分支1 上重放一遍
 
 正确的回退姿势
 
@@ -87,7 +100,7 @@ git rebase			尚未理解
 
 回到指定版本：git reset --hard 指定版本号	 把版本库、暂存区、工作区强行重置到指定版本（HEAD指向这个版本）
 			  git reset --soft 当前最新版本		 把HEAD设置指向当前版本，相当于在当前版本的基础上做修改
-			  git commiit -m'回到xx版本'	 提交得到跟指定版本相同的最新版本，满足fast forward
+			  git commiit -m'回到xx版本'	 提交得到跟指定版本相同的最新版本，满足fast forward（快进合并）
 
 回到指定版本（新开分支法）：git checkout -b 分支名 指定版本号	新开一个分支同时重置到指定版本
 							git reset --soft 当前最新版本		指针移动到最新版本
