@@ -41,8 +41,8 @@ git log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s 
 
 
 git reset --hard 版本号		硬重置，把版本库，暂存区，工作区重置到指定版本  HEAD（当前版本）HEAD^^(前两个版本)HEAD~3(前三个版本)
-git reset --soft 版本号		软重置，把版本库				重置到指定版本
 git reset 版本号			默认重置把版本库，暂存区，		重置到指定版本 默认参数--mixed
+git reset --soft 版本号		软重置，把版本库				重置到指定版本
 
 git revert 版本号			做反向操作覆盖，撤销指定版本和其之后版本的修改
 
@@ -87,9 +87,21 @@ git push origin 标签名				推送指定标签到远程库
 git push origin --tags				推送所有标签到远程库
 git tag -d 标签名  git push origin :refs/tags/标签名	删除本地标签然后删除远程标签
 
-git rebase 分支1						取出当前所在的分支2，在它身上找出分支2与分支1共同祖先之后的commit历史，变基到分支1最新修改版本后面（依序重放一遍）；然后切换到分支1输入命令git merge分支2快进合并这些历史避免未变基直接git merge而导致提交历史有分叉
-git rebase 分支1 分支2					将分支2变基到分支1，效果同上一条命令（可以不用切换到分支2进行变基）
+git rebase 分支1						取出当前所在的分支2，在它身上找出分支2与分支1共同祖先之后的commit历史，以分支1为基底进行变基依序重放一遍，应用到当前分支2；
+										然后切换到分支1输入命令git merge分支2可以快进合并这些历史可以获得不同于直接用git merge方法合并分支的 线性历史提交
+git rebase 分支1 分支2					以分支1为基底变基分支2，效果同上一条命令（可以不用切换到分支2进行变基）
 git rebase --onto 分支1 分支2 分支3		取出 分支3，找出处于 分支3 和 分支2 的共同祖先之后的修改，然后把它们在 分支1 上重放一遍
+git pull --rebase origin/master			效果同git fetch origin/master + git rebase origin/master 拉取远程分支，衍合到本地分支，把远程别人提交的新修改（远程和本地共同祖先之后的修改）拉到本地放在自己的新修改前面
+
+解决rebase冲突：在rebase的过程中，有时也会有conflict，这时Git会停止rebase并让用户去解决冲突，解决完冲突后，用git add命令去更新这些内容，
+然后不用执行git commit,直接执行git rebase --continue,这样git会继续apply余下的补丁。
+在任何时候，都可以用git rebase --abort参数来终止rebase的行动，并且mywork分支会回到rebase开始前的状态。
+
+代码提交完整流程
+步骤如下： git add -A git commit -m "message" git pull --rebase (或者git fetch origin/master+ git rebase origin/master） 
+解决冲突 git add冲突文件 git rebase –continue git push 其中，3、4、5点，如果没遇到冲突就不用进行，直接push上去。 
+当遇到冲突时，git会提示patch failed，并要我们解决问题了再执行git rebase --continue
+
 
 正确的回退姿势
 
