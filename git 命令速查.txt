@@ -66,6 +66,9 @@ git merge --no-ff 分支名	禁用快进式合并，生成一个合并提交，�
 git remote add origin <url>     关联远程版本库
 git remote -v					查看远程版本库信息
 git remote show 主机名 			查看指定远程版本库信息
+git remote origin set-url [url]	修改远程版本库
+git remote rm origin
+git remote add origin [url]		先删后关联远程库或直接修改config文件
 
 git push --set-upstream origin branch_name  在远程创建一个与本地branch_name同名的分支并跟踪
 git checkout --track origin/branch_name	    在本地创建一个与branch_name同名分支跟踪远程分支
