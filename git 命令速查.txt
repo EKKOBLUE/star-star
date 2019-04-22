@@ -77,7 +77,7 @@ git fetch origin  					从远程库获取代码
 git pull origin 远程分支名:本地分支名	拉取远程库指定分支版本到指定分支	等于git fetch+git merge
 git pull origin 分支名				拉取远程库指定分支版本到当前分支
 
-git push - u origin master 			将本地的master分支推送到origin主机，同时指定origin为默认主机，后面就可以不加任何参数使用git push
+git push -u origin master 			将本地的master分支推送到origin主机，同时指定origin为默认主机，后面就可以不加任何参数使用git push
 git push origin                     将当前分支推送到origin主机的对应分支
 git push origin master				将当前本地分支推送到远程对应分支
 git push origin master:master		将本地指定分支推送到远程指定分支
