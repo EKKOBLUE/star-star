@@ -97,6 +97,8 @@ git rebase 分支1						取出当前所在的分支2，在它身上找出分支2
 git rebase 分支1 分支2					以分支1为基底变基分支2，效果同上一条命令（可以不用切换到分支2进行变基）
 git rebase --onto 分支1 分支2 分支3		取出 分支3，找出处于 分支3 和 分支2 的共同祖先之后的修改，然后把它们在 分支1 上重放一遍
 git pull --rebase origin/master			效果同git fetch origin/master + git rebase origin/master 拉取远程分支，衍合到本地分支，把远程别人提交的新修改（远程和本地共同祖先之后的修改）拉到本地放在自己的新修改前面
+git rebase -i HEAD~3					交互式编辑汇合或修改过去三个提交历史
+在用rebase衍合分支时传入-i参数可以在衍合前 修改或者衍合当前分支提交历史
 
 解决rebase冲突：在rebase的过程中，有时也会有conflict，这时Git会停止rebase并让用户去解决冲突，解决完冲突后，用git add命令去更新这些内容，
 然后不用执行git commit,直接执行git rebase --continue,这样git会继续apply余下的补丁。
